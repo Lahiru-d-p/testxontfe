@@ -1,0 +1,122 @@
+<div class="position-relative w-100" #listPrompt>
+  <!-- Input Field -->
+  <div #inputField class="d-flex align-items-center gap-2 w-100">
+    <!-- Code Input -->
+    <input
+      type="text"
+      class="form-control form-control-sm"
+      [(ngModel)]="selectedCode"
+      (keyup)="onSearch('code')"
+      (click)="openModal()"
+      style="min-width: 100px; max-width: 150px"
+    />
+
+    <!-- Dropdown Icon -->
+    <i
+      class="fa fa-angle-double-down"
+      aria-hidden="true"
+      (click)="openModal()"
+      role="button"
+      style="cursor: pointer"
+    ></i>
+
+    <!-- Description Input - Should Fill Space -->
+    <input
+      type="text"
+      class="form-control form-control-sm flex-grow-1"
+      [(ngModel)]="selectedName"
+      (keyup)="onSearch('name')"
+      (click)="openModal()"
+    />
+
+    <!-- Clear Button -->
+    <button
+      *ngIf="isModalOpen"
+      type="button"
+      class="btn btn-sm btn-primary p-0 d-flex align-items-center justify-content-center rounded-circle"
+      style="width: 24px; height: 20px"
+      (click)="clearSelection()"
+      aria-label="Clear selection"
+    >
+      <i class="fa fa-times"></i>
+    </button>
+
+    <!-- Required Indicator -->
+    <span
+      *ngIf="!selectedCode || !selectedName"
+      class="text-danger fw-bold"
+      aria-label="Required field"
+      >*</span
+    >
+  </div>
+
+  <!-- Modal Overlay -->
+  <div *ngIf="isModalOpen" class="selection-modal shadow-sm mt-2">
+    <div class="modal-body d-flex flex-column h-100">
+      <!-- Table Container -->
+      <div style="overflow-y: auto; flex-grow: 1">
+        <table class="table table-bordered table-hover table-sm mb-0">
+          <thead class="bg-light">
+            <tr>
+              <th>Code</th>
+              <th>Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr
+              *ngFor="let item of paginatedItems"
+              (click)="selectItem(item)"
+              role="button"
+              tabindex="0"
+              class="clickable-row"
+            >
+              <td>{{ item.Code }}</td>
+              <td>{{ item.Description }}</td>
+            </tr>
+            <tr *ngIf="paginatedItems.length === 0">
+              <td colspan="2" class="text-center text-muted">No data found</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Pagination -->
+      <nav *ngIf="totalPages > 1" aria-label="Page navigation" class="mt-2">
+        <ul class="pagination justify-content-start pagination-sm mb-0">
+          <li class="page-item" [class.disabled]="currentPage === 1">
+            <a
+              class="page-link"
+              href="#"
+              (click)="$event.preventDefault(); goToPage(1)"
+              aria-label="Go to first page"
+              >&laquo;</a
+            >
+          </li>
+
+          <li
+            class="page-item"
+            *ngFor="let page of pageArray"
+            [class.active]="currentPage === page"
+          >
+            <a
+              class="page-link"
+              href="#"
+              (click)="$event.preventDefault(); goToPage(page)"
+              >{{ page }}</a
+            >
+          </li>
+
+          <li class="page-item" [class.disabled]="currentPage === totalPages">
+            <a
+              class="page-link"
+              href="#"
+              (click)="$event.preventDefault(); goToPage(totalPages)"
+              aria-label="Go to last page"
+              >&raquo;</a
+            >
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </div>
+</div>
