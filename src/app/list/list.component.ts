@@ -1,5 +1,5 @@
 import { Component, ViewChild, ElementRef, OnInit } from '@angular/core';
-import moment from 'moment';
+import dayjs from 'dayjs';
 import {
   FormBuilder,
   FormGroup,
@@ -89,8 +89,8 @@ export class ListComponent implements OnInit {
     this.selection.FromDate = today;
     this.selection.ToDate = today;
 
-    this.selection.FromDateShow = moment(today).format(this.format);
-    this.selection.ToDateShow = moment(today).format(this.format);
+    this.selection.FromDateShow = dayjs(today).format(this.format);
+    this.selection.ToDateShow = dayjs(today).format(this.format);
   }
 
   onSelectDistributor(distributor: any): void {
@@ -143,11 +143,11 @@ export class ListComponent implements OnInit {
 
   private updateSelectionDates(): void {
     this.selection.FromDate = this.selection.FromDateShow
-      ? moment(this.selection.FromDateShow).toDate()
+      ? dayjs(this.selection.FromDateShow).toDate()
       : null;
 
     this.selection.ToDate = this.selection.ToDateShow
-      ? moment(this.selection.ToDateShow).toDate()
+      ? dayjs(this.selection.ToDateShow).toDate()
       : null;
   }
 
