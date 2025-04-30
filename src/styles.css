@@ -42,6 +42,7 @@ body {
 .btn-gradient-blue:hover {
   background-image: linear-gradient(to top, #6ca8d6 0%, #1a4b80 100%);
   box-shadow: 0 4px #6ca8d6;
+  color: white;
 }
 /* Disabled Button Style */
 .btn-gradient-gray {

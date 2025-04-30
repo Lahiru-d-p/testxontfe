@@ -6,6 +6,7 @@ import {
   ViewChild,
   ElementRef,
   HostListener,
+  SimpleChanges,
 } from '@angular/core';
 import { ReportService } from '../report.service';
 import { CommonModule } from '@angular/common';
@@ -44,13 +45,19 @@ export class SelectionPromptComponent {
   @ViewChild('modal') modalRef!: ElementRef;
 
   constructor(private reportService: ReportService) {}
+  private lastLoadedType: 'Distributor' | 'Territory' | null = null;
 
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['type'] && this.type !== this.lastLoadedType) {
+      this.lastLoadedType = this.type;
+      this.items = [];
+      this.filteredItems = [];
+      this.loadData();
+    }
+  }
   // Open the modal and load data if needed
   openModal(): void {
     this.isModalOpen = true;
-    if (!this.items.length) {
-      this.loadData();
-    }
   }
 
   // Close the modal

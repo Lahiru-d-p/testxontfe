@@ -49,7 +49,7 @@ export class ListComponent implements OnInit {
   public busy: Subscription | null = null;
   public selectionType: string = 'Distributor';
   private format: string =
-    localStorage.getItem('ClientDateFormat') || 'yyyy-mm-dd';
+    localStorage.getItem('ClientDateFormat') || 'yyyy-MM-dd';
 
   public selection: Selection = {
     FromDate: null,
