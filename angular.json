@@ -16,10 +16,7 @@
             "outputPath": "dist/soxlr71",
             "index": "src/index.html",
             "browser": "src/main.ts",
-            "polyfills": [
-              "zone.js",
-              "@angular/localize/init"
-            ],
+            "polyfills": ["zone.js", "@angular/localize/init"],
             "tsConfig": "tsconfig.app.json",
             "assets": [
               {
@@ -37,6 +34,7 @@
           },
           "configurations": {
             "production": {
+              "baseHref": "/SOXLR71/",
               "budgets": [
                 {
                   "type": "initial",
