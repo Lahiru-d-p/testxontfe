@@ -1,5 +1,4 @@
 import { Component, ViewChild, ElementRef, OnInit } from '@angular/core';
-import dayjs from 'dayjs';
 import {
   FormBuilder,
   FormGroup,
@@ -10,7 +9,7 @@ import {
 import { Subscription } from 'rxjs';
 
 import { ReportService } from '../report.service';
-import { CommonModule } from '@angular/common';
+import { CommonModule, formatDate } from '@angular/common';
 import { SelectionPromptComponent } from '../selection-prompt/selection-prompt.component';
 
 interface Selection {
@@ -88,9 +87,25 @@ export class ListComponent implements OnInit {
     const today = new Date();
     this.selection.FromDate = today;
     this.selection.ToDate = today;
+    this.selection.FromDateShow = formatDate(today, this.format, 'en-US');
+    this.selection.ToDateShow = formatDate(today, this.format, 'en-US');
 
-    this.selection.FromDateShow = dayjs(today).format(this.format);
-    this.selection.ToDateShow = dayjs(today).format(this.format);
+    this.form.patchValue({
+      FromDateShow: this.selection.FromDateShow,
+      ToDateShow: this.selection.ToDateShow,
+      VATFlag: this.selection.VATFlag,
+      NonVATFlag: this.selection.NonVATFlag,
+      reportType: this.selection.ReportSummaryFlag ? 'Summary' : 'Detail',
+    });
+
+    this.form.valueChanges.subscribe((formValues) => {
+      this.selection.VATFlag = formValues.VATFlag;
+      this.selection.NonVATFlag = formValues.NonVATFlag;
+      this.selection.FromDateShow = formValues.FromDateShow;
+      this.selection.ToDateShow = formValues.ToDateShow;
+      this.selection.ReportSummaryFlag = formValues.reportType === 'Summary';
+      this.selection.ReportDetailFlag = formValues.reportType === 'Detail';
+    });
   }
 
   onSelectDistributor(distributor: any): void {
@@ -150,12 +165,16 @@ export class ListComponent implements OnInit {
 
   private updateSelectionDates(): void {
     this.selection.FromDate = this.selection.FromDateShow
-      ? dayjs(this.selection.FromDateShow).toDate()
+      ? this.toDateOnly(this.selection.FromDateShow)
       : null;
 
     this.selection.ToDate = this.selection.ToDateShow
-      ? dayjs(this.selection.ToDateShow).toDate()
+      ? this.toDateOnly(this.selection.ToDateShow)
       : null;
+  }
+  private toDateOnly(dateString: string): Date {
+    const formatted = formatDate(dateString, 'yyyy-MM-dd', 'en-US');
+    return new Date(formatted);
   }
 
   private base64ToArrayBuffer(base64: string): Uint8Array {
