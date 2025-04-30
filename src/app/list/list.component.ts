@@ -11,6 +11,7 @@ import { Subscription } from 'rxjs';
 import { ReportService } from '../report.service';
 import { CommonModule, formatDate } from '@angular/common';
 import { SelectionPromptComponent } from '../selection-prompt/selection-prompt.component';
+import { AlertPromptComponent } from '../alert-prompt/alert-prompt.component';
 
 interface Selection {
   FromDate: Date | null;
@@ -39,11 +40,11 @@ interface Selection {
     CommonModule,
     FormsModule,
     SelectionPromptComponent,
+    AlertPromptComponent,
   ],
 })
 export class ListComponent implements OnInit {
-  @ViewChild('msgPrompt') msgPrompt!: ElementRef;
-  @ViewChild('VATStatusAlert') vatStatusAlert!: ElementRef;
+  @ViewChild('alertModal') alertModal!: any;
 
   public busy: Subscription | null = null;
   public selectionType: string = 'Distributor';
@@ -135,9 +136,8 @@ export class ListComponent implements OnInit {
 
   btnOK_click_verifyBeforeSubmit(event: Event): void {
     if (!this.selection.VATFlag && !this.selection.NonVATFlag) {
-      this.vatStatusAlert.nativeElement.showAlert(
-        'Please select at least one option from "VAT Status" checkboxes.',
-        'OK'
+      this.alertModal.show(
+        'Please select at least one option from "VAT Status" checkboxes.'
       );
       event.preventDefault();
     } else {
@@ -147,7 +147,7 @@ export class ListComponent implements OnInit {
 
   private setupErrorSubscription(): void {
     this.reportService.componentMethodCalled$.subscribe((error) => {
-      this.msgPrompt.nativeElement.show(error, 'SOXLR71');
+      this.alertModal.show(error, error.MsgNumber);
     });
   }
 

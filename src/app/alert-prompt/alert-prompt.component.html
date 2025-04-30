@@ -1,0 +1,11 @@
+<div class="custom-modal-backdrop" *ngIf="visible">
+  <div class="custom-modal-box">
+    <p class="custom-modal-message">
+      <span *ngIf="code"
+        ><strong>{{ code }}</strong
+        >: </span
+      >{{ message }}
+    </p>
+    <button class="btn btn-gradient-blue" (click)="hide()">OK</button>
+  </div>
+</div>
