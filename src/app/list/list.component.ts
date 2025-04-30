@@ -109,6 +109,13 @@ export class ListComponent implements OnInit {
     this.selection.DistributorName = '';
     this.selection.TerritoryName = '';
     this.selection.TerritoryCode = '';
+    if (type === 'Distributor') {
+      this.selection.DistributorFlag = true;
+      this.selection.TerritoryFlag = false;
+    } else if (type === 'Territory') {
+      this.selection.DistributorFlag = false;
+      this.selection.TerritoryFlag = true;
+    }
   }
 
   btnOK_click_verifyBeforeSubmit(event: Event): void {
