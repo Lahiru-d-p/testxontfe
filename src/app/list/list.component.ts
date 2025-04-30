@@ -147,7 +147,7 @@ export class ListComponent implements OnInit {
 
   private setupErrorSubscription(): void {
     this.reportService.componentMethodCalled$.subscribe((error) => {
-      this.alertModal.show(error.Desc, error.MsgNumber);
+      this.alertModal.show(error.desc, error.msgNumber);
     });
   }
 
