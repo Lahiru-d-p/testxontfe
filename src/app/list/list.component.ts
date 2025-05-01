@@ -80,8 +80,6 @@ export class ListComponent implements OnInit {
       FromDateShow: ['', Validators.required],
       ToDateShow: ['', Validators.required],
     });
-
-    this.setupErrorSubscription();
   }
 
   ngOnInit(): void {
@@ -106,6 +104,14 @@ export class ListComponent implements OnInit {
       this.selection.ToDateShow = formValues.ToDateShow;
       this.selection.ReportSummaryFlag = formValues.reportType === 'Summary';
       this.selection.ReportDetailFlag = formValues.reportType === 'Detail';
+    });
+  }
+  ngAfterViewInit(): void {
+    this.reportService.componentMethodCalled$.subscribe((error) => {
+      this.alertModal?.show(
+        error?.error?.Desc || 'An unexpected error occurred.',
+        error?.error?.MsgNumber || 0
+      );
     });
   }
 
@@ -143,12 +149,6 @@ export class ListComponent implements OnInit {
     } else {
       this.btnOK_click();
     }
-  }
-
-  private setupErrorSubscription(): void {
-    this.reportService.componentMethodCalled$.subscribe((error) => {
-      this.alertModal.show(error.desc, error.msgNumber);
-    });
   }
 
   private btnOK_click(): void {

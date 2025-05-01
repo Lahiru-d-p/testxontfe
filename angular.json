@@ -64,7 +64,8 @@
               "buildTarget": "SOXLR71:build:production"
             },
             "development": {
-              "buildTarget": "SOXLR71:build:development"
+              "buildTarget": "SOXLR71:build:development",
+              "proxyConfig": "proxy.conf.json"
             }
           },
           "defaultConfiguration": "development"
