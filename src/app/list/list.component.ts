@@ -193,4 +193,44 @@ export class ListComponent implements OnInit {
     link.click();
     window.URL.revokeObjectURL(link.href);
   }
+
+  closeTab() {
+    var t = window.parent.document.getElementById(
+      'txtCurrentTaskCode'
+    ) as HTMLInputElement;
+    if (t?.value) {
+      var closeButton = window.parent.document.getElementById(
+        t.value + '_close'
+      );
+      closeButton?.click();
+    } else {
+      var taskCode = this.currentTaskCode();
+      this.cleanLocalStorage(taskCode);
+    }
+  }
+
+  private currentTaskCode() {
+    var base = document.getElementsByTagName('base');
+    var taskCode = '';
+    if (base.length > 0) {
+      var href = base[0].href;
+      var array = href.replace(/\/$/, '').split('/');
+      taskCode = array[array.length - 1];
+    }
+    return taskCode.trim();
+  }
+  private cleanLocalStorage(taskCode: any) {
+    const keysToRemove = [];
+
+    for (let i = 0; i < localStorage.length; i++) {
+      const key = localStorage.key(i);
+      if (key && key.startsWith(taskCode + '_')) {
+        keysToRemove.push(key);
+      }
+    }
+
+    for (const key of keysToRemove) {
+      localStorage.removeItem(key);
+    }
+  }
 }
