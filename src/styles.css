@@ -29,6 +29,7 @@ body {
   cursor: pointer;
   margin-bottom: 10px;
   position: relative;
+  border-color: none;
 }
 
 /* Gradient Blue Button */
@@ -52,4 +53,8 @@ body {
   box-shadow: 0 4px rgba(147, 149, 150, 0.69);
   border: none;
   cursor: not-allowed;
+}
+.btn:focus,
+.btn:active {
+  border: none;
 }

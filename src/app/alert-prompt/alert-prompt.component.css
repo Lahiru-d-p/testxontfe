@@ -6,12 +6,10 @@
   height: 100%;
   background-color: rgba(0, 0, 0, 0.5);
   z-index: 1050;
-
-  /* Align to top instead of center */
   display: flex;
   justify-content: center;
-  align-items: flex-start; /* Changed from center to top */
-  padding-top: 2rem; /* Adds some spacing from top */
+  align-items: flex-start;
+  padding-top: 2rem;
 }
 
 .custom-modal-box {
