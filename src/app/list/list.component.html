@@ -160,15 +160,7 @@
         <div class="offset-sm-2 col-sm-9 d-flex gap-2">
           <button
             type="submit"
-            class="btn"
-            [ngClass]="{
-              'btn-gradient-blue':
-                form.valid &&
-                (selection.DistributorCode || selection.TerritoryCode),
-              'btn-gradient-gray':
-                !form.valid ||
-                (!selection.DistributorCode && !selection.TerritoryCode)
-            }"
+            class="MainButtonStyle"
             [disabled]="
               !form.valid ||
               (!selection.DistributorCode && !selection.TerritoryCode)
@@ -177,11 +169,7 @@
           >
             OK
           </button>
-          <button
-            type="button"
-            class="btn btn-gradient-blue"
-            (click)="closeTab()"
-          >
+          <button type="button" class="MainButtonStyle" (click)="closeTab()">
             Exit
           </button>
         </div>
