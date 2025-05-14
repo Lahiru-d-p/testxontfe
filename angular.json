@@ -34,7 +34,7 @@
           },
           "configurations": {
             "production": {
-              "baseHref": "/SOXLR71/",
+              "baseHref": "./",
               "budgets": [
                 {
                   "type": "initial",
@@ -50,6 +50,7 @@
               "outputHashing": "all"
             },
             "development": {
+              "baseHref": "./",
               "optimization": false,
               "extractLicenses": false,
               "sourceMap": true
