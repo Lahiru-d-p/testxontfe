@@ -4,6 +4,7 @@
     <!-- Code Input -->
     <input
       type="text"
+      id="codeInput"
       class="form-control form-control-sm"
       [(ngModel)]="selectedCode"
       (keyup)="onSearch('code')"
@@ -24,6 +25,7 @@
     <input
       type="text"
       class="form-control form-control-sm flex-grow-1"
+      id="descriptionInput"
       [(ngModel)]="selectedName"
       (keyup)="onSearch('name')"
       (click)="openModal()"
