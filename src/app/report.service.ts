@@ -144,11 +144,15 @@ export class ReportService {
       );
   }
 
-  public getUserName(): Observable<any> {
-    return this.http.get(`${this.getRootURL()}/api/Message/GetUserName`).pipe(
-      map((response: any) => response),
-      catchError((error) => this.handleError(error))
-    );
+  public getUserName(): Observable<string> {
+    return this.http
+      .get<string>(`${this.getRootURL()}/api/Message/GetUserName`)
+      .pipe(
+        catchError((error) => {
+          this.handleError(error);
+          return of('');
+        })
+      );
   }
 
   private handleError(error: any): Observable<never> {

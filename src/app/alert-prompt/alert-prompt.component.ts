@@ -28,6 +28,7 @@ export interface ErrorInfo {
 export class AlertPromptComponent {
   visible = false;
   messageType: 'alert' | 'confirm' | 'error' = 'alert';
+  private cachedUserName: string | null = null;
 
   messageText = '';
   okButtonText = 'OK';
@@ -59,11 +60,16 @@ export class AlertPromptComponent {
     this.errorMessage = error;
     this.visible = true;
     if (this.errorMessage && this.errorMessage.ErrorType === 1) {
-      this.busy = this.reportService.getUserName().subscribe((data) => {
-        if (this.errorMessage) {
-          this.errorMessage.UserName = data ?? '';
-        }
-      });
+      if (this.cachedUserName !== null) {
+        this.errorMessage.UserName = this.cachedUserName;
+      } else {
+        this.busy = this.reportService.getUserName().subscribe((data) => {
+          this.cachedUserName = data ?? '';
+          if (this.errorMessage) {
+            this.errorMessage.UserName = this.cachedUserName ?? '';
+          }
+        });
+      }
     }
   }
 
