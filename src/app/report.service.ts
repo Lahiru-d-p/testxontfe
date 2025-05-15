@@ -144,6 +144,13 @@ export class ReportService {
       );
   }
 
+  public getUserName(): Observable<any> {
+    return this.http.get(`${this.getRootURL()}/api/Message/GetUserName`).pipe(
+      map((response: any) => response),
+      catchError((error) => this.handleError(error))
+    );
+  }
+
   private handleError(error: any): Observable<never> {
     this.componentMethodCallSource.next(error);
     return throwError(() => error);

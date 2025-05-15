@@ -108,10 +108,7 @@ export class ListComponent implements OnInit {
   }
   ngAfterViewInit(): void {
     this.reportService.componentMethodCalled$.subscribe((error) => {
-      this.alertModal?.show(
-        error?.error?.Desc || 'An unexpected error occurred.',
-        error?.error?.MsgNumber || 0
-      );
+      this.alertModal?.showError(error?.error);
     });
   }
 
@@ -142,7 +139,7 @@ export class ListComponent implements OnInit {
 
   btnOK_click_verifyBeforeSubmit(event: Event): void {
     if (!this.selection.VATFlag && !this.selection.NonVATFlag) {
-      this.alertModal.show(
+      this.alertModal.showAlert(
         'Please select at least one option from "VAT Status" checkboxes.'
       );
       event.preventDefault();

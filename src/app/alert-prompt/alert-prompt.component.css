@@ -1,4 +1,4 @@
-.custom-modal-backdrop {
+.modal-backdrop {
   position: fixed;
   top: 0;
   left: 0;
@@ -9,18 +9,32 @@
   display: flex;
   justify-content: center;
   align-items: flex-start;
-  padding-top: 2rem;
+  padding-top: 4rem;
 }
 
-.custom-modal-box {
+.modal-box {
   background: white;
-  padding: 1.5rem 2rem;
   border-radius: 8px;
+  padding: 1.5rem 2rem;
+  min-width: 300px;
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
   text-align: center;
-  min-width: 300px;
 }
 
+.error-detail table {
+  color: #fff;
+  background: #383838;
+  font-size: 13px;
+  margin-bottom: 1rem;
+  width: 100%;
+}
+
+.error-detail h4 {
+  background-color: crimson;
+  color: white;
+  padding: 0.5rem;
+  margin: 0 0 1rem 0;
+}
 .custom-modal-message {
   font-weight: bold;
   margin-bottom: 1rem;
