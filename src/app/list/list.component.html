@@ -1,13 +1,11 @@
 <ngx-spinner
-  bdColor="rgb(255,255,255,0.5)"
-  size="medium"
-  color="#fff"
-  type="ball-spin-clockwise"
   [fullScreen]="true"
-  [zIndex]="9999"
-  >Please wait...
-</ngx-spinner>
-
+  color="#a0cadb"
+  [bdColor]="'rgba(255,255,255,0.5)'"
+  type="line-spin-fade"
+  size="medium"
+  >Please wait...</ngx-spinner
+>
 <app-alert-prompt #alertModal></app-alert-prompt>
 
 <form [formGroup]="form" (keydown.enter)="$event.preventDefault()" class="p-2">
