@@ -2,7 +2,6 @@ import { Component, ViewChild, OnInit } from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
-  FormsModule,
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
@@ -38,7 +37,6 @@ interface Selection {
   imports: [
     ReactiveFormsModule,
     CommonModule,
-    FormsModule,
     SelectionPromptComponent,
     AlertPromptComponent,
     NgxSpinnerModule,

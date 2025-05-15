@@ -1,17 +1,18 @@
 <div class="position-relative w-100" #listPrompt>
   <!-- Input Field -->
-  <div #inputField class="d-flex align-items-center gap-2 w-100">
+  <div
+    class="d-flex align-items-center gap-2 w-100"
+    [formGroup]="selectionForm"
+  >
     <!-- Code Input -->
     <input
       type="text"
-      id="codeInput"
       class="form-control form-control-sm"
-      [(ngModel)]="selectedCode"
+      formControlName="code"
       (keyup)="onSearch('code')"
       (click)="openModal()"
       style="min-width: 100px; max-width: 150px"
     />
-
     <!-- Dropdown Icon -->
     <i
       class="fa fa-angle-double-down"
@@ -20,17 +21,14 @@
       role="button"
       style="cursor: pointer"
     ></i>
-
     <!-- Description Input - Should Fill Space -->
     <input
       type="text"
       class="form-control form-control-sm flex-grow-1"
-      id="descriptionInput"
-      [(ngModel)]="selectedName"
+      formControlName="description"
       (keyup)="onSearch('name')"
       (click)="openModal()"
     />
-
     <!-- Clear Button -->
     <button
       *ngIf="isModalOpen"
@@ -42,10 +40,12 @@
     >
       <i class="fa fa-times"></i>
     </button>
-
     <!-- Required Indicator -->
     <span
-      *ngIf="!selectedCode || !selectedName"
+      *ngIf="
+        !selectionForm.get('code')?.value ||
+        !selectionForm.get('description')?.value
+      "
       class="text-danger fw-bold"
       aria-label="Required field"
       >*</span
@@ -81,7 +81,6 @@
           </tbody>
         </table>
       </div>
-
       <!-- Pagination -->
       <nav *ngIf="totalPages > 1" aria-label="Page navigation" class="mt-2">
         <ul class="pagination justify-content-start pagination-sm mb-0">
@@ -94,7 +93,6 @@
               >&laquo;</a
             >
           </li>
-
           <li
             class="page-item"
             *ngFor="let page of pageArray"
@@ -107,7 +105,6 @@
               >{{ page }}</a
             >
           </li>
-
           <li class="page-item" [class.disabled]="currentPage === totalPages">
             <a
               class="page-link"

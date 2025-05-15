@@ -8,22 +8,26 @@ import {
   HostListener,
   SimpleChanges,
 } from '@angular/core';
-import { ReportService } from '../report.service';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { ReactiveFormsModule, FormGroup, FormBuilder } from '@angular/forms';
+import { ReportService } from '../report.service';
 
 @Component({
   selector: 'app-selection-prompt',
   templateUrl: './selection-prompt.component.html',
   styleUrls: ['./selection-prompt.component.css'],
-  imports: [CommonModule, FormsModule],
   standalone: true,
+  imports: [CommonModule, ReactiveFormsModule],
 })
 export class SelectionPromptComponent {
   // Inputs for type and selected values
   @Input() type: 'Distributor' | 'Territory' = 'Distributor';
-  @Input() selectedName: string = '';
-  @Input() selectedCode: string = '';
+  @Input() set selectedCode(code: string) {
+    this.selectionForm.patchValue({ code });
+  }
+  @Input() set selectedName(name: string) {
+    this.selectionForm.patchValue({ description: name });
+  }
 
   // Output event when an item is selected
   @Output() itemSelected = new EventEmitter<{
@@ -33,20 +37,20 @@ export class SelectionPromptComponent {
 
   // Modal and data state
   isModalOpen: boolean = false;
-  searchTerm: string = '';
   items: Array<{ Code: string; Description: string }> = [];
   filteredItems: Array<{ Code: string; Description: string }> = [];
-  currentPage: number = 1;
-  itemsPerPage: number = 10;
 
   // View children
-  @ViewChild('inputField') inputField!: ElementRef;
   @ViewChild('listPrompt') listPrompt!: ElementRef;
-  @ViewChild('modal') modalRef!: ElementRef;
 
-  constructor(private reportService: ReportService) {}
-  private lastLoadedType: 'Distributor' | 'Territory' | null = null;
+  selectionForm: FormGroup;
 
+  constructor(private reportService: ReportService, private fb: FormBuilder) {
+    this.selectionForm = this.fb.group({
+      code: [''],
+      description: [''],
+    });
+  }
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['type'] && this.type !== this.lastLoadedType) {
       this.lastLoadedType = this.type;
@@ -55,6 +59,7 @@ export class SelectionPromptComponent {
       this.loadData();
     }
   }
+
   // Open the modal and load data if needed
   openModal(): void {
     this.isModalOpen = true;
@@ -67,9 +72,8 @@ export class SelectionPromptComponent {
 
   // Handle search by code or name
   onSearch(type: 'code' | 'name'): void {
-    const term = (type === 'code' ? this.selectedCode : this.selectedName)
-      .toLowerCase()
-      .trim();
+    const control = type === 'code' ? 'code' : 'description';
+    const term = this.selectionForm.get(control)?.value?.toLowerCase().trim();
 
     this.filteredItems =
       term && term != ''
@@ -79,32 +83,37 @@ export class SelectionPromptComponent {
               : item.Description.toLowerCase().includes(term)
           )
         : [...this.items];
-
     this.currentPage = 1;
   }
 
   // Clear selected item
   clearSelection(): void {
-    this.selectedCode = '';
-    this.selectedName = '';
+    this.selectionForm.reset();
     this.itemSelected.emit({ Code: '', Description: '' });
+    this.onSearch('code');
   }
 
   // Select an item and emit it
   selectItem(item: { Code: string; Description: string }): void {
+    this.selectionForm.patchValue({
+      code: item.Code,
+      description: item.Description,
+    });
+
     this.itemSelected.emit(item);
     this.closeModal();
   }
+
   get pageArray(): number[] {
     return Array.from({ length: this.totalPages }, (_, i) => i + 1);
   }
+
   // Load data based on type
   private loadData(): void {
     const serviceCall =
       this.type === 'Distributor'
         ? this.reportService.getDistributorPrompt()
         : this.reportService.getTerritoryPrompt();
-
     serviceCall.subscribe((data) => {
       this.items = data.map((item: any) => ({
         Code:
@@ -140,14 +149,15 @@ export class SelectionPromptComponent {
   @HostListener('document:click', ['$event'])
   onClickOutside(event: MouseEvent): void {
     if (!this.isModalOpen) return;
-
     const target = event.target as Node;
-
     const insidePrompt = this.listPrompt?.nativeElement.contains(target);
-    const insideModal = this.modalRef?.nativeElement?.contains(target);
 
-    if (!insidePrompt && !insideModal) {
+    if (!insidePrompt) {
       this.closeModal();
     }
   }
+
+  private lastLoadedType: 'Distributor' | 'Territory' | null = null;
+  currentPage: number = 1;
+  itemsPerPage: number = 10;
 }
