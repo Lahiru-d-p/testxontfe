@@ -114,24 +114,28 @@ export class ReportService {
 
   public getTerritoryPrompt(): Observable<any> {
     // return of(this.territories);
-    return this.http.get('/api/SOXLR71/GetTerritoryPrompt').pipe(
-      map((response: any) => response),
-      catchError((error) => this.handleError(error))
-    );
+    return this.http
+      .get(`${this.getRootURL()}/api/SOXLR71/GetTerritoryPrompt`)
+      .pipe(
+        map((response: any) => response),
+        catchError((error) => this.handleError(error))
+      );
   }
 
   public getDistributorPrompt(): Observable<any> {
     // return of(this.distributors);
-    return this.http.get('/api/SOXLR71/GetDistributorPrompt').pipe(
-      map((response: any) => response),
-      catchError((error) => this.handleError(error))
-    );
+    return this.http
+      .get(`${this.getRootURL()}/api/SOXLR71/GetDistributorPrompt`)
+      .pipe(
+        map((response: any) => response),
+        catchError((error) => this.handleError(error))
+      );
   }
 
   public generateExcel(data: any): Observable<any> {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
     return this.http
-      .post('/api/SOXLR71/GenerateExcel', data, {
+      .post(`${this.getRootURL()}/api/SOXLR71/GenerateExcel`, data, {
         headers,
       })
       .pipe(
@@ -145,11 +149,20 @@ export class ReportService {
     return throwError(() => error);
   }
 
-  public getRootURL = () => {
-    const seg = window.location.pathname
-      .slice(1)
+  public getRootURL = (): string => {
+    const { hostname, origin, pathname } = window.location;
+
+    if (hostname === 'localhost') {
+      return origin;
+    }
+    const pathSegments = window.location.pathname
       .split('/')
-      .find((s) => s.trim());
-    return seg ? `${window.location.origin}/${seg}` : window.location.origin;
+      .filter((s) => s && s.trim().length > 0);
+
+    const appSegment = pathSegments.length > 0 ? pathSegments[0] : '';
+
+    return appSegment
+      ? `${window.location.origin}/${appSegment}`
+      : window.location.origin;
   };
 }
