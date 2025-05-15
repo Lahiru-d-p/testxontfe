@@ -1,4 +1,4 @@
-import { Component, ViewChild, ElementRef, OnInit } from '@angular/core';
+import { Component, ViewChild, OnInit } from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
@@ -6,8 +6,8 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
+import { NgxSpinnerModule, NgxSpinnerService } from 'ngx-spinner';
 import { Subscription } from 'rxjs';
-
 import { ReportService } from '../report.service';
 import { CommonModule, formatDate } from '@angular/common';
 import { SelectionPromptComponent } from '../selection-prompt/selection-prompt.component';
@@ -41,6 +41,7 @@ interface Selection {
     FormsModule,
     SelectionPromptComponent,
     AlertPromptComponent,
+    NgxSpinnerModule,
   ],
 })
 export class ListComponent implements OnInit {
@@ -71,7 +72,11 @@ export class ListComponent implements OnInit {
 
   public form: FormGroup;
 
-  constructor(private fb: FormBuilder, private reportService: ReportService) {
+  constructor(
+    private fb: FormBuilder,
+    private reportService: ReportService,
+    private spinner: NgxSpinnerService
+  ) {
     this.form = this.fb.group({
       selectionType: ['Distributor'],
       VATFlag: [true],
@@ -152,11 +157,20 @@ export class ListComponent implements OnInit {
     this.updateSelectionDates();
     this.selection.RootURL = this.reportService.getRootURL();
 
+    this.spinner.show();
     this.busy = this.reportService
       .generateExcel({ SelectionCriteria: this.selection })
-      .subscribe((jsonData) => {
-        const byteArr = this.base64ToArrayBuffer(jsonData.fileContents);
-        this.generateExcelFile(byteArr, jsonData.ReportName);
+      .subscribe({
+        next: (jsonData) => {
+          const byteArr = this.base64ToArrayBuffer(jsonData.fileContents);
+          this.generateExcelFile(byteArr, jsonData.ReportName);
+        },
+        complete: () => {
+          this.spinner.hide();
+        },
+        error: (error) => {
+          this.spinner.hide();
+        },
       });
   }
 

@@ -1,3 +1,13 @@
+<ngx-spinner
+  bdColor="rgb(255,255,255,0.5)"
+  size="medium"
+  color="#fff"
+  type="ball-spin-clockwise"
+  [fullScreen]="true"
+  [zIndex]="9999"
+  >Please wait...
+</ngx-spinner>
+
 <app-alert-prompt #alertModal></app-alert-prompt>
 
 <form [formGroup]="form" (keydown.enter)="$event.preventDefault()" class="p-2">
@@ -163,7 +173,8 @@
             class="MainButtonStyle"
             [disabled]="
               !form.valid ||
-              (!selection.DistributorCode && !selection.TerritoryCode)
+              (!selection.DistributorCode && !selection.TerritoryCode) ||
+              (busy !== null && !busy.closed)
             "
             (click)="btnOK_click_verifyBeforeSubmit($event)"
           >
