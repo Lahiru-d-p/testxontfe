@@ -9,7 +9,8 @@ import { NgxSpinnerModule, NgxSpinnerService } from 'ngx-spinner';
 import { Subscription } from 'rxjs';
 import { ReportService } from '../report.service';
 import { CommonModule, formatDate } from '@angular/common';
-import { SelectionPromptComponent } from '../selection-prompt/selection-prompt.component';
+// import { SelectionPromptComponent } from '../selection-prompt/selection-prompt.component';
+import { XontVenturaListPromptModule } from '../list-prompt/xont.ventura.list.prompt.component';
 import { AlertPromptComponent } from '../alert-prompt/alert-prompt.component';
 
 interface Selection {
@@ -37,13 +38,16 @@ interface Selection {
   imports: [
     ReactiveFormsModule,
     CommonModule,
-    SelectionPromptComponent,
+    // SelectionPromptComponent,
+    XontVenturaListPromptModule,
     AlertPromptComponent,
     NgxSpinnerModule,
   ],
 })
 export class ListComponent implements OnInit {
   @ViewChild('alertModal') alertModal!: any;
+  @ViewChild('lpmtDistributor') lpmtDistributor!: any;
+  @ViewChild('lpmtTerritory') lpmtTerritory!: any;
 
   public busy: Subscription | null = null;
   public selectionType: string = 'Distributor';
@@ -68,6 +72,19 @@ export class ListComponent implements OnInit {
     RootURL: '',
   };
 
+  public lpmtDistributor_DataBind(): void {
+    this.lpmtDistributor.dataSourceObservable =
+      this.reportService.getDistributorPrompt();
+    this.selection.TerritoryCode = '';
+    this.selection.TerritoryName = '';
+  }
+
+  public lpmtTerritory_DataBind(): void {
+    this.lpmtTerritory.dataSourceObservable =
+      this.reportService.getTerritoryPrompt();
+    this.selection.DistributorCode = '';
+    this.selection.DistributorName = '';
+  }
   public form: FormGroup;
 
   constructor(
@@ -82,6 +99,10 @@ export class ListComponent implements OnInit {
       reportType: ['Summary'],
       FromDateShow: ['', Validators.required],
       ToDateShow: ['', Validators.required],
+      DistributorCode: '',
+      DistributorName: '',
+      TerritoryCode: '',
+      TerritoryName: '',
     });
   }
 
@@ -107,6 +128,10 @@ export class ListComponent implements OnInit {
       this.selection.ToDateShow = formValues.ToDateShow;
       this.selection.ReportSummaryFlag = formValues.reportType === 'Summary';
       this.selection.ReportDetailFlag = formValues.reportType === 'Detail';
+      this.selection.DistributorCode = formValues.DistributorCode;
+      this.selection.DistributorName = formValues.DistributorName;
+      this.selection.TerritoryCode = formValues.TerritoryCode;
+      this.selection.TerritoryName = formValues.TerritoryName;
     });
   }
   ngAfterViewInit(): void {
@@ -115,15 +140,15 @@ export class ListComponent implements OnInit {
     });
   }
 
-  onSelectDistributor(distributor: any): void {
-    this.selection.DistributorCode = distributor.Code;
-    this.selection.DistributorName = distributor.Description;
-  }
+  // onSelectDistributor(distributor: any): void {
+  //   this.selection.DistributorCode = distributor.Code;
+  //   this.selection.DistributorName = distributor.Description;
+  // }
 
-  onSelectTerritory(territory: any): void {
-    this.selection.TerritoryCode = territory.Code;
-    this.selection.TerritoryName = territory.Description;
-  }
+  // onSelectTerritory(territory: any): void {
+  //   this.selection.TerritoryCode = territory.Code;
+  //   this.selection.TerritoryName = territory.Description;
+  // }
 
   onSelectionChange(type: string): void {
     this.selectionType = type;

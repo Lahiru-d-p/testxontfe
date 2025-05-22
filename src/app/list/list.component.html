@@ -52,12 +52,28 @@
         <div class="mb-3 row">
           <label class="col-sm-2 col-form-label fw-bold">Distributor</label>
           <div class="col-sm-9 col-lg-6">
-            <app-selection-prompt
+            <!-- <app-selection-prompt
               type="Distributor"
               [selectedName]="selection.DistributorName"
               [selectedCode]="selection.DistributorCode"
               (itemSelected)="onSelectDistributor($event)"
-            ></app-selection-prompt>
+            ></app-selection-prompt> -->
+            <xont-ventura-list-prompt
+              name="lpmtDistributor"
+              id="lpmtDistributor"
+              #lpmtDistributor
+              [maxLengths]="[10, 40]"
+              [inputWidths]="[120, 350]"
+              [gridHeaders]="['Code', 'Description']"
+              [gridFields]="['DistributorCode', 'DistributorName']"
+              [mandatory]="selection.DistributorFlag"
+              [strict]="false"
+              (onDataBind)="lpmtDistributor_DataBind()"
+              [control]="form"
+              [modelProps]="['DistributorCode', 'DistributorName']"
+              [dataFields]="['DistributorCode', 'DistributorName']"
+            >
+            </xont-ventura-list-prompt>
           </div>
         </div>
       </ng-container>
@@ -67,12 +83,28 @@
         <div class="mb-3 row">
           <label class="col-sm-2 col-form-label fw-bold">Territory</label>
           <div class="col-sm-9 col-lg-6">
-            <app-selection-prompt
+            <!-- <app-selection-prompt
               type="Territory"
               [selectedName]="selection.TerritoryName"
               [selectedCode]="selection.TerritoryCode"
               (itemSelected)="onSelectTerritory($event)"
-            ></app-selection-prompt>
+            ></app-selection-prompt> -->
+            <xont-ventura-list-prompt
+              name="lpmtTerritory"
+              id="lpmtTerritory"
+              #lpmtTerritory
+              [maxLengths]="[10, 40]"
+              [inputWidths]="[120, 350]"
+              [gridHeaders]="['Code', 'Description']"
+              [gridFields]="['TerritoryCode', 'TerritoryName']"
+              [mandatory]="selection.TerritoryFlag"
+              [strict]="false"
+              (onDataBind)="lpmtTerritory_DataBind()"
+              [control]="form"
+              [modelProps]="['TerritoryCode', 'TerritoryName']"
+              [dataFields]="['TerritoryCode', 'TerritoryName']"
+            >
+            </xont-ventura-list-prompt>
           </div>
         </div>
       </ng-container>
